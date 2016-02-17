@@ -1,0 +1,11 @@
+{
+    "keys": {
+        "MANDRILL": "mandrill api key"
+    },
+    "data": {
+        "imobiliaria": {
+            "MY_ADDRESS": "where do I live?",
+            "RECEIVER": "who's the pal that should send me the email?"
+        }
+    }
+}
