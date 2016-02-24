@@ -1,11 +1,20 @@
 {
-    "keys": {
-        "MANDRILL": "mandrill api key"
+    "smtp": {
+        "driver": "smtp",
+        "server": "server_address:server_port",
+        "username": "smtp_username",
+        "password": "smtp_password"
     },
+
+    "email": {
+        "reply_to": "My Name <my@email>",
+        "sender": "My Name <my@email>"
+    },
+
     "data": {
         "imobiliaria": {
-            "MY_ADDRESS": "where do I live?",
-            "RECEIVER": "who's the pal that should send me the email?"
+            "address": "my address",
+            "receiver": "Guy who handles the invoices <probablyhisname@somecorp.com>"
         }
     }
 }
