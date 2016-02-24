@@ -7,36 +7,52 @@ are just too dumb or too lazy to generate all of the invoices in advance or
 to at least send them to me regularly.
 """
 from json import load
-from mandrill import Mandrill
+import smtplib
+from email.mime.text import MIMEText
+from datetime import datetime
 
-def main(receiver, housing_address, api_key):
-    mandrill_client = Mandrill(api_key)
-    message = {
-        'from_email': 'message.from_email@example.com',
-        'from_name': 'Example Name',
-        'headers': {'Reply-To': 'message.reply@example.com'},
-        'html': '<p>Example HTML content</p>',
-        'important': False,
-        'metadata': {'website': 'www.example.com'},
-        'preserve_recipients': None,
-        'recipient_metadata': [{
-            'rcpt': 'recipient.email@example.com',
-            'values': {'user_id': 123456}
-        }],
-        'return_path_domain': None,
-        'signing_domain': None,
-        'subaccount': 'customer-123',
-        'subject': 'example subject',
-        'tags': ['password-resets'],
-        'text': 'Example text content',
-        'to': [{
-            'email': 'recipient.email@example.com',
-            'name': 'Recipient Name',
-            'type': 'to'
-        }],
-        'track_clicks': None,
-        'track_opens': None,
-        'tracking_domain': None,
-        'url_strip_qs': None,
-        'view_content_link': None
+def main(smtp_data, email_data, address):
+    """
+    Main function
+    """
+    month = datetime.now().month # Loading the current month
+    text = """<p>Olá,<br>
+    Vocês poderiam me enviar o boleto do aluguel do mês atual, com vencimento
+    no próximo dia 10?
+    Meu imóvel é o da <b>{address}</b></p>
+    <p>Obrigado!</p>
+    """
+    subject = "Boleto de aluguel do mês {month}"
+
+    message = MIMEText(text.format(address=address), 'html')
+    message['Subject'] = subject.format(month=month)
+    message['From'] = email_data['sender']
+    message['To'] = email_data['receiver']
+    message['Reply-To'] = email_data['reply_to']
+
+    server = smtplib.SMTP(host=smtp_data['server'], port=smtp_data['port'])
+    server.ehlo()
+    server.starttls()
+    server.login(smtp_data['username'], smtp_data['password'])
+    server.send_message(message)
+    server.close()
+
+if __name__ == "__main__":
+    config = load(open('config.json'))
+
+    smtp_data = {
+        'server': config['smtp']['server'].split(':')[0],
+        'port': config['smtp']['server'].split(':')[1],
+        'username': config['smtp']['username'],
+        'password': config['smtp']['password']
     }
+
+    email_data = {
+        'sender': config['email']['sender'],
+        'reply_to': config['email']['reply_to'],
+        'receiver': config['data']['imobiliaria']['receiver']
+    }
+
+    address = config['data']['imobiliaria']['address']
+
+    main(smtp_data, email_data, address)
