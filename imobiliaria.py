@@ -34,7 +34,7 @@ def main(smtp_data, email_data, address):
     message['To'] = email_data['receiver']
     message['Reply-To'] = email_data['reply_to']
 
-    server = smtplib.SMTP(host=smtp_data['server'], port=smtp_data['port'])
+    server = SMTP(host=smtp_data['server'], port=smtp_data['port'])
     server.ehlo()
     server.starttls()
     server.login(smtp_data['username'], smtp_data['password'])
