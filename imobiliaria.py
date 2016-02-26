@@ -10,9 +10,10 @@ I wrote this just for fun.
 """
 
 from json import load
-import smtplib
+from smtplib import SMTP
 from email.mime.text import MIMEText
 from datetime import datetime
+from os import path
 
 def main(smtp_data, email_data, address):
     """
@@ -41,7 +42,8 @@ def main(smtp_data, email_data, address):
     server.close()
 
 if __name__ == "__main__":
-    config = load(open('config.json'))
+    script_dir = path.dirname(__file__)
+    config = load(open(path.join(script_dir, 'config.json')))
 
     smtp_data = {
         'server': config['smtp']['server'].split(':')[0],
