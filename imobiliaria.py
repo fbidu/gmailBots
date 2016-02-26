@@ -1,11 +1,14 @@
-#! python
+#! /usr/bin/python3
 # -*- encoding: utf-8 -*-
 """
 Script that sends an email to my real state agency every month, asking them
 to send me an invoice for my rent. They - or whoever designed their system -
 are just too dumb or too lazy to generate all of the invoices in advance or
 to at least send them to me regularly.
+Obs.: There are easier, ready-to-use systems for e-mail scheduling.
+I wrote this just for fun.
 """
+
 from json import load
 import smtplib
 from email.mime.text import MIMEText
